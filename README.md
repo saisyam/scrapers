@@ -2,15 +2,20 @@
 Scrapers built using Python
 
 ## NYTimes Scrapper
-[This](https://github.com/saisyam/scrapers/blob/main/news/nytimes.py) scraper extracts news from https://www.nytimes.com website. Currently it pulls highligts of the given section. The below example pulls highlights from `politics` and `business` sections.
+[This](https://github.com/saisyam/scrapers/blob/main/news/nytimes.py) scraper extracts news from https://www.nytimes.com website. Currently it pulls highligts of the given section and top 10 latest news items. The below example pulls highlights from `politics` and `business` sections.
 
 ```python
 nyt = NYTimes("politics")
-for post in nyt.scrape_highlights():
-    print(post)
+html = nyt.gethtml()
+if html is not None:
+    for post in nyt.scrape_latest(html):
+        print(post)
+
 nyt = NYTimes("business")
-for post in nyt.scrape_highlights():
-    print(post)
+html = nyt.gethtml()
+if html is not None:
+    for post in nyt.scrape_latest(html):
+        print(post)
 ```
 
 # DISCLAIMER
