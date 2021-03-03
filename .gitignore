@@ -131,3 +131,4 @@ dmypy.json
 bin/
 pyvenv.cfg
 include/
+.DS_Store
