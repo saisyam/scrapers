@@ -5,8 +5,9 @@ class NykaaSpider(scrapy.Spider):
     name = "nykaa"
 
     def start_requests(self):
+        url = getattr(self, 'url', 'https://www.nykaa.com/brands/lakme/c/604')
         urls = [
-            "https://www.nykaa.com/brands/lakme/c/604",
+            url,
         ]   
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse)
