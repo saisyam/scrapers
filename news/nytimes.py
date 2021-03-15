@@ -1,6 +1,9 @@
+import sys
+sys.path.append("../")
+
 from bs4 import BeautifulSoup
-import requests
 import unicodedata
+from utils import htmlutils
 
 class NYTimes:
     name = "nytimes"
@@ -10,8 +13,10 @@ class NYTimes:
         self.category = category
         
     def scrape(self):
-        r = requests.get(self.url)
-        self.soup = BeautifulSoup(r.text, "html5lib")
+        html = htmlutils.get_html(self.url)
+        if html == None:
+            return {}
+        self.soup = BeautifulSoup(html, "html5lib")
         return self.scrape_highlights()
 
     def scrape_highlights(self):
@@ -35,6 +40,6 @@ class NYTimes:
             }
 
 
-nyt = NYTimes("https://www.nytimes.com/section/politics")
+nyt = NYTimes("https://www.nytimes.com/section/politics", "politics")
 for i in nyt.scrape():
     print(i)
