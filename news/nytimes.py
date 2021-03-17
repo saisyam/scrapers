@@ -4,13 +4,14 @@ sys.path.append("../")
 from bs4 import BeautifulSoup
 import unicodedata
 from utils import htmlutils
+from utils.base import BaseScraper
 
-class NYTimes:
+class NYTimes(BaseScraper):
     name = "nytimes"
 
     def __init__(self, url, category):
-        self.url = url
         self.category = category
+        super().__init__(url) 
         
     def scrape(self):
         html = htmlutils.get_html(self.url)

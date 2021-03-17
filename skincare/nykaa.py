@@ -4,13 +4,14 @@ sys.path.append("../")
 from bs4 import BeautifulSoup
 import unicodedata
 from utils import htmlutils
+from utils.base import BaseScraper
 
-class Nykaa:
+class Nykaa(BaseScraper):
     name = "nykaa"
 
     def __init__(self, url, brand):
-        self.url = url
         self.brand = brand
+        super().__init__(url) 
         
     def scrape(self):
         html = htmlutils.get_html_with_js(self.url)
@@ -34,6 +35,7 @@ class Nykaa:
                 "brand": self.brand,
                 "source": "nykaa"
             }
+
 
 
 nyk = Nykaa("https://www.nykaa.com/brands/biotique/c/923", "Biotique")
