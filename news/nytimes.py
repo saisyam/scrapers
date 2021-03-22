@@ -41,6 +41,11 @@ class NYTimes(BaseScraper):
             }
 
 
-nyt = NYTimes("https://www.nytimes.com/section/politics", "politics")
-for i in nyt.scrape():
-    print(i)
+arguments = len(sys.argv)
+if arguments < 3:
+    print("Usage: python3 nytimes.py <URL> <Category>")
+    exit()
+else:
+    nyt = NYTimes(sys.argv[1], sys.argv[2])
+    for i in nyt.scrape():
+        print(i)

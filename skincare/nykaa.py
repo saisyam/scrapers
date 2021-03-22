@@ -36,8 +36,11 @@ class Nykaa(BaseScraper):
                 "source": "nykaa"
             }
 
-
-
-nyk = Nykaa("https://www.nykaa.com/brands/biotique/c/923", "Biotique")
-for i in nyk.scrape():
-    print(i)
+arguments = len(sys.argv)
+if arguments < 3:
+    print("Usage: python3 nykaa.py <URL> <Brand>")
+    exit()
+else:
+    nyk = Nykaa(sys.argv[1], sys.argv[2])
+    for i in nyk.scrape():
+        print(i)
