@@ -28,11 +28,18 @@ class Ebay(BaseScraper):
     def scrape_product(self, purl):
         html = htmlutils.get_html(purl)
         soup = BeautifulSoup(html, "html5lib")
+        msgpanel = soup.find('div', {'id','msgPanel'})
+        if msgpanel is not None:
+            if "listing was ended" in msgpanel.get_text().strip():
+                return
         cpanel = soup.find("div", {'id':'CenterPanel'})
-        if cpanel == None:
-            return self.scrape_product_type_1(soup, purl)
-        else:
+        container = soup.find("div", {'id': 'vi-layout-container'})
+        if cpanel is not None:
             return self.scrape_product_type_2(soup, purl)
+        elif container is not None:
+            return self.scrape_product_type_3(soup, purl)
+        else:
+            return self.scrape_product_type_1(soup, purl)
 
     def scrape_product_type_1(self, soup, url):
         title= soup.find("div", {'id':'mainContent'}).find("h1", {'class':'product-title'}).get_text().replace('Details about','').strip()
@@ -133,6 +140,33 @@ class Ebay(BaseScraper):
             'url': url
         }
 
+    def scrape_product_type_3(self, soup, url):
+        container = soup.find("div", {'id': 'vi-layout-container'})
+        center_panel = container.find("div", {'name':'wrapper-centerpanel'})
+        left_block = center_panel.find('div', {'class':'vi-wireframe__middle-block--to-left'})
+        title = left_block.find('h1',{'class':'vi-title__main'}).get_text().strip()
+        price = left_block.find('span', {'class':'main-price-with-shipping'}).get_text().strip()
+        shipping = left_block.find('span', {'class':'logistics-cost'}).get_text().replace('+', '').replace('Shipping','').strip()
+        container1 = container.find("div",{'id':'vi-frag-btfcontainer'})
+        meta_container = container1.find('div',{'class':'app-itemspecifics-mobile-wrapper'})
+        items = meta_container.find_all('dl')
+        metadata = {}
+        for item in items:
+            key = item.find('dt').get_text().strip()
+            value = item.find('dd').get_text().strip()
+            metadata[key] = value
+        pic_panel = container.find('div',{'class':'vi-wireframe__left-block'}).find('div',{'class':'thumbPicturePanel'})
+        imgs = pic_panel.find_all("figure")
+        img_urls = []
+        for img in imgs:
+            img_urls.append(img.find('img')['src'].replace("s-l64","s-l1600"))
+        return {
+            'title': title,
+            #'ebay_id': ebay_id,
+            'images': img_urls,
+            'metadata': metadata,
+            'url': url
+        }
 
 arguments = len(sys.argv)
 if arguments < 3:
