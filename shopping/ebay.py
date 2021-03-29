@@ -83,7 +83,10 @@ class Ebay(BaseScraper):
         mcontent = soup.find("div", {'id':'mainContent'})
         price_span = mcontent.find("span", {'itemprop':'price'})
         price = price_span.get_text().strip()
-        shipping = mcontent.find("span", {'id':'fshippingCost'}).get_text().strip()
+        shipping_id = mcontent.find("span", {'id':'fshippingCost'})
+        shipping = ""
+        if shipping_id is not None: # sometime shipping need to be calculated
+            shipping = shipping_id.get_text().strip()
         desc_section = soup.find("div", {'id':'BottomPanel'}).find("div", {'id':'viTabs_0_is'}).find("div",{'class':'section'})
         metadata = {}
         metadata['price'] = price
