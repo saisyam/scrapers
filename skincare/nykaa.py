@@ -14,7 +14,7 @@ class Nykaa(BaseScraper):
         super().__init__(url) 
         
     def scrape(self):
-        html = htmlutils.get_html_with_js(self.url)
+        html = htmlutils.get_html(self.url)
         if html == None:
             return {}      
         self.soup = BeautifulSoup(html, "html5lib")
