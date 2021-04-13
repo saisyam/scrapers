@@ -1,5 +1,5 @@
 # scrapers
-Scrapers built using Python Scrapy
+Scrapers built using Python Splinter and BeautifulSoup libraries
 
 ## News Scrapper
 [News scraper](https://github.com/saisyam/scrapers/tree/main/news) will scrape news websites.
